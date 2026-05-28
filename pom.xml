@@ -234,9 +234,6 @@
         </profile>
         <profile>
             <id>folia</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <properties>
                 <plugin.platform>Folia</plugin.platform>
                 <maven.test.skip>true</maven.test.skip>

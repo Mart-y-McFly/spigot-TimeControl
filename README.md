@@ -1,3 +1,5 @@
+Only to update until dodaylghtcycle ends.
+
 # TimeControl
 
 TimeControl is a [Bukkit](https://dev.bukkit.org/) / [Spigot](https://www.spigotmc.org/wiki/about-spigot/) server plugin that lets you configure the duration of each section of the [Minecraft daylight cycle](https://minecraft.fandom.com/wiki/Daylight_cycle).

@@ -11,13 +11,16 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
+
       - uses: ./.github/actions/build
+
       - name: Prepare release description
         run: |
           RELEASE_DESC="${{ github.workspace }}/RELEASE_DESC.md"
           echo '' > $RELEASE_DESC
           echo "RELEASE_DESC=$RELEASE_DESC" >> $GITHUB_ENV
+
       - name: Close corresponding milestone
         id: "close_milestone"
         uses: Akkjon/close-milestone@v2.1.0
@@ -26,6 +29,7 @@ jobs:
         with:
           milestone_name: ${{ github.ref_name }}
           crash_on_missing: false
+
       - name: Add closed milestone to release notes
         if: ${{ steps.close_milestone.outputs.milestone_id != null }}
         run: |
@@ -34,25 +38,31 @@ jobs:
           echo '' >> ${{ env.RELEASE_DESC }}
           echo "Completed milestone [${{ github.ref_name }}]($MILESTONE_URL)! 🎉" >> ${{ env.RELEASE_DESC }}
           echo '' >> ${{ env.RELEASE_DESC }}
+
       - name: Compute JAR checksums
         run: |
           echo '## JAR checksums' >> ${{ env.RELEASE_DESC }}
           echo '```' >> ${{ env.RELEASE_DESC }}
           algorithms=(1 256 512)
-          for i in "${algorithms[@]}"; do
-            shasum -a $i -b target/TimeControl.jar | awk '{print $1}' | sed -e "s/^/SHA$i: /" >> ${{ env.RELEASE_DESC }}
+
+          for jar in target/TimeControl-*-*.jar; do
+            filename=$(basename "$jar")
+            echo "--- $filename ---" >> ${{ env.RELEASE_DESC }}
+            for i in "${algorithms[@]}"; do
+              shasum -a $i -b "$jar" | awk '{print $1}' | sed -e "s/^/SHA$i: /" >> ${{ env.RELEASE_DESC }}
+            done
+            echo '' >> ${{ env.RELEASE_DESC }}
           done
           echo '```' >> ${{ env.RELEASE_DESC }}
+
       - name: Create release
-        uses: softprops/action-gh-release@v1
-        with:
-          body: ""
-          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'snap') }}
-          files: target/TimeControl.jar
-          fail_on_unmatched_files: true
-          generate_release_notes: true
-      - name: Append JAR checksums to release description
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           body_path: ${{ env.RELEASE_DESC }}
-          append_body: true
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'snap') }}
+          files: |
+            target/TimeControl-*-Spigot.jar
+            target/TimeControl-*-Paper.jar
+            target/TimeControl-*-Folia.jar
+          fail_on_unmatched_files: true
+          generate_release_notes: true

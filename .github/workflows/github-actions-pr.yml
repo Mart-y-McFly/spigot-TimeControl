@@ -7,10 +7,10 @@ jobs:
     name: PR Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/build
       - name: Publish test coverage results
-        uses: PavanMudigonda/jacoco-reporter@v4.8
+        uses: PavanMudigonda/jacoco-reporter@v5.1
         with:
           coverage_results_path: "target/site/jacoco/jacoco.xml"
           coverage_report_title: "Test coverage results"

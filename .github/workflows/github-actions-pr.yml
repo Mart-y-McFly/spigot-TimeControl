@@ -2,6 +2,7 @@ name: PR Check
 on: pull_request
 permissions:
   checks: write
+  pull-requests: write
 jobs:
   coverage:
     name: PR Build
@@ -12,7 +13,7 @@ jobs:
       - name: Publish test coverage results
         uses: PavanMudigonda/jacoco-reporter@v5.1
         with:
-          coverage_results_path: "target/site/jacoco/jacoco.xml"
+          coverage_results_path: "**/target/site/jacoco/jacoco.xml"
           coverage_report_title: "Test coverage results"
           coverage_report_name: "Test coverage results"
           github_token: ${{ secrets.GITHUB_TOKEN }}

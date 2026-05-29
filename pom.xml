@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.pupskuchen</groupId>
     <artifactId>timecontrol</artifactId>
-    <version>1.21.3</version>
+    <version>1.21.4</version>
     <packaging>jar</packaging>
     <name>TimeControl</name>
     <url>https://github.com/Pupskuchen/spigot-TimeControl</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-        <minecraft.api.version>1.20</minecraft.api.version> 
+        <minecraft.api.version>1.21</minecraft.api.version> 
     </properties>
     <build>
         <finalName>${project.name}</finalName>
@@ -180,7 +180,7 @@
         <dependency>
             <groupId>org.mockbukkit.mockbukkit</groupId>
             <artifactId>mockbukkit-v1.21</artifactId>
-            <version>4.20.0</version>
+            <version>4.29.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -215,7 +215,7 @@
                 <dependency>
                     <groupId>org.spigotmc</groupId>
                     <artifactId>spigot-api</artifactId>
-                    <version>1.21.3-R0.1-SNAPSHOT</version>
+                    <version>1.21.4-R0.1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -232,7 +232,7 @@
                 <dependency>
                     <groupId>io.papermc.paper</groupId>
                     <artifactId>paper-api</artifactId>
-                    <version>1.21.3-R0.1-SNAPSHOT</version>
+                    <version>1.21.4-R0.1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>

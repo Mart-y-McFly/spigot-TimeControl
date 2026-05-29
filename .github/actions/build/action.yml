@@ -29,14 +29,14 @@ runs:
 
     - name: Build Paper
       run: |
-        mvn --batch-mode clean verify -P paper
+        mvn --batch-mode verify -P paper
         cp target/TimeControl-*-Paper.jar dist/
         if [ -f target/site/jacoco/jacoco.xml ]; then cp -r target/site/jacoco/* dist/jacoco/; fi
       shell: bash
 
     - name: Build Folia
       run: |
-        mvn --batch-mode clean verify -P folia
+        mvn --batch-mode verify -P folia
         cp target/TimeControl-*-Folia.jar dist/
         if [ -f target/site/jacoco/jacoco.xml ]; then cp -r target/site/jacoco/* dist/jacoco/; fi
       shell: bash

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.pupskuchen</groupId>
     <artifactId>timecontrol</artifactId>
-    <version>1.20.4</version>
+    <version>1.20.6</version>
     <packaging>jar</packaging>
     <name>TimeControl</name>
     <url>https://github.com/Pupskuchen/spigot-TimeControl</url>
@@ -180,7 +180,7 @@
         <dependency>
             <groupId>com.github.seeseemelk</groupId>
             <artifactId>MockBukkit-v1.20</artifactId>
-            <version>3.80.0</version>
+            <version>3.93.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -215,7 +215,7 @@
                 <dependency>
                     <groupId>org.spigotmc</groupId>
                     <artifactId>spigot-api</artifactId>
-                    <version>1.20.4-R0.1-SNAPSHOT</version>
+                    <version>1.20.6-R0.1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -232,7 +232,7 @@
                 <dependency>
                     <groupId>io.papermc.paper</groupId>
                     <artifactId>paper-api</artifactId>
-                    <version>1.20.4-R0.1-SNAPSHOT</version>
+                    <version>1.20.6-R0.1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -250,7 +250,7 @@
                 <dependency>
                     <groupId>dev.folia</groupId>
                     <artifactId>folia-api</artifactId>
-                    <version>1.20.4-R0.1-SNAPSHOT</version>
+                    <version>1.20.6-R0.1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>

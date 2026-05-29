@@ -21,31 +21,23 @@ runs:
     - name: Build Spigot
       run: |
         mvn --batch-mode clean verify -P spigot
-        cp target/TimeControl-*-Spigot.jar dist/ || echo "Spigot JAR nicht gefunden"
+        cp target/TimeControl-*-Spigot.jar dist/
       shell: bash
 
     - name: Build Paper
       run: |
         mvn --batch-mode verify -P paper
-        cp target/TimeControl-*-Paper.jar dist/ || echo "Paper JAR nicht gefunden"
+        cp target/TimeControl-*-Paper.jar dist/
       shell: bash
 
     - name: Build Folia
       run: |
         mvn --batch-mode verify -P folia
-        cp target/TimeControl-*-Folia.jar dist/ || echo "Folia JAR nicht gefunden"
+        cp target/TimeControl-*-Folia.jar dist/
       shell: bash
 
     - name: Generate JaCoCo Report and Restore Target
       run: |
-        echo "=== Generiere finalen JaCoCo XML-Bericht ==="
         mvn jacoco:report
-        
         cp dist/*.jar target/
-  
-        if [ -f target/site/jacoco/jacoco.xml ]; then
-          echo "Erfolg: jacoco.xml wurde erfolgreich generiert!"
-        else
-          echo "Fehler: jacoco.xml fehlt immer noch."
-        fi
       shell: bash

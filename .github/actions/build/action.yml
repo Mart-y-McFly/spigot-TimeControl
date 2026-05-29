@@ -15,52 +15,37 @@ runs:
       shell: bash
 
     - name: Prepare distribution directory
-      run: |
-        mkdir -p dist
-        mkdir -p dist/jacoco
+      run: mkdir -p dist
       shell: bash
 
     - name: Build Spigot
       run: |
         mvn --batch-mode clean verify -P spigot
-        cp target/TimeControl-*-Spigot.jar dist/
-        if [ -f target/site/jacoco/jacoco.xml ]; then cp -r target/site/jacoco/* dist/jacoco/; fi
+        cp target/TimeControl-*-Spigot.jar dist/ || echo "Spigot JAR nicht gefunden"
       shell: bash
 
     - name: Build Paper
       run: |
         mvn --batch-mode verify -P paper
-        cp target/TimeControl-*-Paper.jar dist/
-        if [ -f target/site/jacoco/jacoco.xml ]; then cp -r target/site/jacoco/* dist/jacoco/; fi
+        cp target/TimeControl-*-Paper.jar dist/ || echo "Paper JAR nicht gefunden"
       shell: bash
 
     - name: Build Folia
       run: |
         mvn --batch-mode verify -P folia
-        cp target/TimeControl-*-Folia.jar dist/
-        if [ -f target/site/jacoco/jacoco.xml ]; then cp -r target/site/jacoco/* dist/jacoco/; fi
+        cp target/TimeControl-*-Folia.jar dist/ || echo "Folia JAR nicht gefunden"
       shell: bash
 
-    - name: Diagnose und Restore
+    - name: Generate JaCoCo Report and Restore Target
       run: |
-        mkdir -p target/site/jacoco
+        echo "=== Generiere finalen JaCoCo XML-Bericht ==="
+        mvn jacoco:report
+        
         cp dist/*.jar target/
-        
-        echo "=== DIAGNOSE: Was wurde im target-Ordner erzeugt? ==="
-        if [ -d target ]; then
-          find target -maxdepth 3 || echo "Target-Inhalt konnte nicht gelistet werden"
+  
+        if [ -f target/site/jacoco/jacoco.xml ]; then
+          echo "Erfolg: jacoco.xml wurde erfolgreich generiert!"
         else
-          echo "Es existiert überhaupt kein target-Ordner nach den Builds!"
-        fi
-        
-        echo "=== DIAGNOSE: Gab es Testberichte (Surefire)? ==="
-        find . -name "*surefire-report*" -o -name "TEST-*.xml" || echo "Keine Test-Ergebnisse gefunden!"
-        
-        # Normaler Restore-Versuch
-        if [ -d dist/jacoco ] && [ "$(ls -A dist/jacoco)" ]; then
-          cp -r dist/jacoco/* target/site/jacoco/
-          echo "JaCoCo-Berichte erfolgreich wiederhergestellt."
-        else
-          echo "Info: No JaCoCo reports found."
+          echo "Fehler: jacoco.xml fehlt immer noch."
         fi
       shell: bash

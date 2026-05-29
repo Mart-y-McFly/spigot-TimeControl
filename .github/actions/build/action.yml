@@ -15,29 +15,35 @@ runs:
       shell: bash
 
     - name: Prepare distribution directory
-      run: mkdir -p dist
+      run: |
+        mkdir -p dist
+        mkdir -p dist/jacoco
       shell: bash
 
     - name: Build Spigot
       run: |
         mvn --batch-mode clean verify -P spigot
         cp target/TimeControl-*-Spigot.jar dist/
+        if [ -f target/site/jacoco/jacoco.xml ]; then cp -r target/site/jacoco/* dist/jacoco/; fi
       shell: bash
 
     - name: Build Paper
       run: |
         mvn --batch-mode clean verify -P paper
         cp target/TimeControl-*-Paper.jar dist/
+        if [ -f target/site/jacoco/jacoco.xml ]; then cp -r target/site/jacoco/* dist/jacoco/; fi
       shell: bash
 
     - name: Build Folia
       run: |
         mvn --batch-mode clean verify -P folia
         cp target/TimeControl-*-Folia.jar dist/
+        if [ -f target/site/jacoco/jacoco.xml ]; then cp -r target/site/jacoco/* dist/jacoco/; fi
       shell: bash
 
     - name: Restore all JARs to target
       run: |
         mkdir -p target
         cp dist/*.jar target/
+        if [ -d dist/jacoco/ ]; then cp -r dist/jacoco/* target/site/jacoco/; fi
       shell: bash

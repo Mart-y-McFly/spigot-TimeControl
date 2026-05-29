@@ -43,7 +43,13 @@ runs:
 
     - name: Restore all JARs to target
       run: |
-        mkdir -p target
+        mkdir -p target/site/jacoco
         cp dist/*.jar target/
-        if [ -d dist/jacoco/ ]; then cp -r dist/jacoco/* target/site/jacoco/; fi
+        find . -name "jacoco.xml" || echo "No jacoco.xml found in hole project!"
+        if [ -d dist/jacoco ] && [ "$(ls -A dist/jacoco)" ]; then
+          cp -r dist/jacoco/* target/site/jacoco/
+          echo "JaCoCo reports copied."
+        else
+          echo "Info: No JaCoCo reports found."
+        fi
       shell: bash

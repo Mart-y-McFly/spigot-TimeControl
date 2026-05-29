@@ -1,7 +1,8 @@
 name: ${project.name}
-main: net.pupskuchen.timecontrol.TimeControl
-version: ${project.version}
-api-version: 1.13
+description: TimeControl built explicitly for ${plugin.platform}
+main: ${project.groupId}.${project.artifactId}.${project.name}
+version: ${project.version}-${plugin.platform}
+api-version: '${minecraft.api.version}'
 author: pupskuchen
-website: https://github.com/Pupskuchen/spigot-TimeControl
+website: ${project.url}
 load: STARTUP

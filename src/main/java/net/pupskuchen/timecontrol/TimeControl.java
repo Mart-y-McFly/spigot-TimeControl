@@ -1,11 +1,8 @@
 package net.pupskuchen.timecontrol;
 
-import java.io.File;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 import net.pupskuchen.timecontrol.config.ConfigHandler;
 import net.pupskuchen.timecontrol.event.player.PlayerBed;
 import net.pupskuchen.timecontrol.event.world.WorldEvents;
@@ -17,15 +14,6 @@ public class TimeControl extends JavaPlugin {
     private ConfigHandler config;
     private TCLogger logger;
     private WorldTimer worldTimer;
-
-    // needed for the plugin to actually be able to be loaded in a server
-    public TimeControl() {}
-
-    // needed for unit tests with MockBukkit
-    protected TimeControl(JavaPluginLoader loader, PluginDescriptionFile description,
-            File dataFolder, File file) {
-        super(loader, description, dataFolder, file);
-    }
 
     @Override
     public void onEnable() {
@@ -83,3 +71,4 @@ public class TimeControl extends JavaPlugin {
         return logger;
     }
 }
+

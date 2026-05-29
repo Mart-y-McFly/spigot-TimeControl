@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
       - uses: ./.github/actions/build
 
       - name: Prepare release description
@@ -23,18 +22,27 @@ jobs:
 
       - name: Close corresponding milestone
         id: "close_milestone"
-        uses: Akkjon/close-milestone@v2.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          milestone_name: ${{ github.ref_name }}
-          crash_on_missing: false
+        run: |
+          MILESTONES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/milestones?state=open")
+          MILESTONE_ID=$(echo "$MILESTONES" | jq -r ".[] | select(.title==\"${{ github.ref_name }}\") | .id")
+          
+          if [ -z "$MILESTONE_ID" ] || [ "$MILESTONE_ID" = "null" ]; then
+            echo "There is no open milestone named ${{ github.ref_name }}."
+            echo "milestone_id=" >> $GITHUB_OUTPUT
+          else
+            curl -s -X PATCH \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d '{"state": "closed"}' \
+              "${{ github.api_url }}/repos/${{ github.repository }}/milestones/$MILESTONE_ID" > /dev/null
+            echo "milestone_id=$MILESTONE_ID" >> $GITHUB_OUTPUT
+          fi
 
       - name: Add closed milestone to release notes
-        if: ${{ steps.close_milestone.outputs.milestone_id != null }}
+        if: ${{ steps.close_milestone.outputs.milestone_id != '' }}
         run: |
-          REPO_URL=$(echo "${{ github.repositoryUrl }}" | sed -e "s/^git:\/\/\(.*\)\.git$/https:\/\/\1/")
-          MILESTONE_URL="$REPO_URL/milestone/${{ steps.close_milestone.outputs.milestone_id }}"
+          MILESTONE_URL="${{ github.server_url }}/${{ github.repository }}/milestone/${{ steps.close_milestone.outputs.milestone_id }}"
           echo '' >> ${{ env.RELEASE_DESC }}
           echo "Completed milestone [${{ github.ref_name }}]($MILESTONE_URL)! 🎉" >> ${{ env.RELEASE_DESC }}
           echo '' >> ${{ env.RELEASE_DESC }}
@@ -44,7 +52,6 @@ jobs:
           echo '## JAR checksums' >> ${{ env.RELEASE_DESC }}
           echo '```' >> ${{ env.RELEASE_DESC }}
           algorithms=(1 256 512)
-
           for jar in target/TimeControl-*-*.jar; do
             filename=$(basename "$jar")
             echo "--- $filename ---" >> ${{ env.RELEASE_DESC }}
@@ -55,14 +62,15 @@ jobs:
           done
           echo '```' >> ${{ env.RELEASE_DESC }}
 
-      - name: Create release
-        uses: softprops/action-gh-release@v2
+      - name: Create release (Forgejo)
+        uses: https://gitea.com/actions/gitea-release-action@main
         with:
+          tag_name: ${{ github.ref_name }}
           body_path: ${{ env.RELEASE_DESC }}
           prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'snap') }}
           files: |
             target/TimeControl-*-Spigot.jar
             target/TimeControl-*-Paper.jar
             target/TimeControl-*-Folia.jar
-          fail_on_unmatched_files: true
-          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
-import be.seeseemelk.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.MockBukkit;
 import net.pupskuchen.timecontrol.config.ConfigHandler;
 import net.pupskuchen.timecontrol.timer.WorldTimer;
 import net.pupskuchen.timecontrol.util.TCLogger;

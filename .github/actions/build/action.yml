@@ -41,14 +41,25 @@ runs:
         if [ -f target/site/jacoco/jacoco.xml ]; then cp -r target/site/jacoco/* dist/jacoco/; fi
       shell: bash
 
-    - name: Restore all JARs to target
+    - name: Diagnose und Restore
       run: |
         mkdir -p target/site/jacoco
         cp dist/*.jar target/
-        find . -name "jacoco.xml" || echo "No jacoco.xml found in hole project!"
+        
+        echo "=== DIAGNOSE: Was wurde im target-Ordner erzeugt? ==="
+        if [ -d target ]; then
+          find target -maxdepth 3 || echo "Target-Inhalt konnte nicht gelistet werden"
+        else
+          echo "Es existiert überhaupt kein target-Ordner nach den Builds!"
+        fi
+        
+        echo "=== DIAGNOSE: Gab es Testberichte (Surefire)? ==="
+        find . -name "*surefire-report*" -o -name "TEST-*.xml" || echo "Keine Test-Ergebnisse gefunden!"
+        
+        # Normaler Restore-Versuch
         if [ -d dist/jacoco ] && [ "$(ls -A dist/jacoco)" ]; then
           cp -r dist/jacoco/* target/site/jacoco/
-          echo "JaCoCo reports copied."
+          echo "JaCoCo-Berichte erfolgreich wiederhergestellt."
         else
           echo "Info: No JaCoCo reports found."
         fi

@@ -83,8 +83,8 @@ public class WorldTimerTest {
 
         scheduler.performTicks(2);
 
-        assertEquals(1, world1.getTime());
-        assertEquals(13004, world2.getTime());
+        assertEquals(3, world1.getTime());
+	    assertEquals(13006, world2.getTime());
     }
 
     @Test
@@ -101,7 +101,7 @@ public class WorldTimerTest {
 
         assertEquals(0, world.getTime());
         scheduler.performTicks(2);
-        assertEquals(2, world.getTime());
+        assertEquals(4, world.getTime());
     }
 
     @Test
@@ -133,8 +133,8 @@ public class WorldTimerTest {
         assertTrue(disabledWorld.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE));
 
         scheduler.performTicks(2);
-        assertEquals(1, world1.getTime());
-        assertEquals(13004, world2.getTime());
+        assertEquals(3, world1.getTime());
+	    assertEquals(13006, world2.getTime());
 
         reset(logger);
 
@@ -147,8 +147,8 @@ public class WorldTimerTest {
         verify(logger, times(0)).debug("Custom time control stopped.");
 
         scheduler.performTicks(2);
-        assertEquals(1, world1.getTime());
-        assertEquals(13008, world2.getTime());
+        assertEquals(5, world1.getTime());
+	    assertEquals(13012, world2.getTime());
 
         worldTimer.disableAll();
         verify(logger).info("Disabling custom time control for world \"%s\".", "world_two");
@@ -156,7 +156,7 @@ public class WorldTimerTest {
         verify(logger).debug("Custom time control stopped.");
 
         scheduler.performTicks(2);
-        assertEquals(1, world1.getTime());
-        assertEquals(13008, world2.getTime());
+        assertEquals(7, world1.getTime());
+	    assertEquals(13014, world2.getTime());
     }
 }

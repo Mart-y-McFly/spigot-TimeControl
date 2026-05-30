@@ -6,8 +6,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.scheduler.BukkitSchedulerMock;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.scheduler.BukkitSchedulerMock;
 import net.pupskuchen.timecontrol.TimeControl;
 
 public class NightSkipSchedulerTest {
